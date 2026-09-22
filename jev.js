@@ -54,11 +54,11 @@ export async function scoreFit(profile, jobDescription) {
     experience_gap: {
       type: "score",
       instructions:
-        "How does the candidate's experience level compare to what the job asks for?",
+        "How do the candidate's YEARS of professional experience compare to the years this job requires? Judge years and seniority level only — not domain or skills match.",
       criteria: [
-        "far below requirement",
+        "far below required years",
         "somewhat below",
-        "meets requirement",
+        "meets required years",
         "somewhat above",
         "well above",
       ],
@@ -85,7 +85,7 @@ export async function scoreFit(profile, jobDescription) {
     hard_blocker: {
       type: "noul",
       instructions:
-        "Is there a hard blocker that would disqualify this candidate regardless of fit (e.g. required license, security clearance, degree, or legal work authorization the candidate lacks)?",
+        "Ignoring skills and seniority fit: does the job state a mandatory credential the candidate lacks — an active security clearance, a specific professional license or certification, a required degree, or legal work authorization/citizenship? Only answer yes for such a formal disqualifier, NOT for a weak skills match or a location preference.",
     },
   };
 

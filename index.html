@@ -67,7 +67,7 @@
       <!-- SCORE -->
       <section class="view" data-view="score">
         <div class="panel">
-          <div class="panel-head"><h2>Paste the job description</h2></div>
+          <div class="panel-head"><h2>Paste the job description</h2><button id="load-example" class="btn btn-ghost small">Try an example</button></div>
           <textarea id="jd" rows="10" spellcheck="false" placeholder="Paste the full job description here…"></textarea>
           <div class="grid2">
             <label class="field"><span>Job title (optional)</span><input id="j-title" type="text" placeholder="auto if left blank" /></label>
@@ -79,9 +79,15 @@
 
         <div id="scorecard" class="panel scorecard" hidden>
           <div class="verdict-row">
-            <div id="verdict-badge" class="verdict-badge">—</div>
+            <div class="gauge" id="gauge" style="--p:0">
+              <div class="gauge-inner">
+                <span id="odds-num">—</span>
+                <span class="gauge-cap">pass odds</span>
+              </div>
+            </div>
             <div class="verdict-main">
-              <div class="odds"><span id="odds-num">—</span><span class="odds-label">chance of passing the screen</span></div>
+              <div id="verdict-badge" class="verdict-badge">—</div>
+              <div class="odds-label">estimated chance of passing the initial screen</div>
               <div id="verdict-reasons" class="muted small"></div>
             </div>
           </div>

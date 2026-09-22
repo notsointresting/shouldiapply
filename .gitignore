@@ -4,3 +4,8 @@ Thumbs.db
 .vscode/
 *.swp
 node_modules/
+
+# local-only testing — never commit
+local.env
+test-live.mjs
+.env

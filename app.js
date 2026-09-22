@@ -119,6 +119,14 @@ function renderScorecard(s) {
   el.verdictBadge.dataset.v = rec.verdict;
   el.verdictBadge.textContent = { apply: "Apply", stretch: "Stretch", skip: "Skip", maybe: "Maybe" }[rec.verdict];
   el.oddsNum.textContent = pct(s.passProbability);
+  // Drive the ring gauge: fill % + color matched to the verdict.
+  const gauge = document.getElementById("gauge");
+  if (gauge) {
+    const p = typeof s.passProbability === "number" ? Math.round(s.passProbability * 100) : 0;
+    const color = rec.verdict === "apply" ? "var(--apply)" : rec.verdict === "skip" ? "var(--skip)" : "var(--stretch)";
+    gauge.style.setProperty("--p", p);
+    gauge.style.setProperty("--gc", color);
+  }
   el.verdictReasons.textContent = rec.reasons.length ? "Why: " + rec.reasons.join(" · ") : "Looks like a solid fit.";
 
   const rows = [];
@@ -200,6 +208,44 @@ function renderTracker() {
 }
 el.exportJson.addEventListener("click", () => tracker.download("applications.json", tracker.exportJSON(), "application/json"));
 el.exportCsv.addEventListener("click", () => tracker.download("applications.csv", tracker.exportCSV(), "text/csv"));
+
+// --- one-click example ----------------------------------------------------
+const EXAMPLE_PROFILE = {
+  resume:
+    "Priya Sharma — Backend Software Engineer, Berlin (open to EU remote). 4 years building Python services. " +
+    "Senior Backend Engineer at FinFlow (fintech, 2023-present): payment-reconciliation microservices in Python/FastAPI, " +
+    "~2M transactions/day, PostgreSQL schema + query optimization (p95 450ms->120ms), AWS (ECS/RDS/S3/CloudWatch), " +
+    "CI/CD with GitHub Actions, on-call. Backend Engineer at ShopStack (2021-2023): REST APIs in Python/Flask, Redis " +
+    "caching, raised test coverage 41%->78%. Skills: Python, FastAPI, Flask, PostgreSQL, Redis, Docker, AWS, REST, " +
+    "CI/CD, pytest, Git, Linux, basic Kubernetes. BSc Computer Science 2021.",
+  title: "Backend Software Engineer",
+  years: 4,
+  skills: "Python, FastAPI, PostgreSQL, AWS, Redis, Docker",
+  location: "Berlin / EU remote",
+  workPref: "remote or hybrid in EU",
+};
+const EXAMPLE_JD =
+  "Backend Engineer (Python) — Remote (EU). PayGrid. Build payment and reconciliation services in Python (FastAPI). " +
+  "Own PostgreSQL schema and query performance. Deploy on AWS; participate in on-call. Requirements: 3+ years backend " +
+  "Python, strong relational databases (PostgreSQL preferred), AWS and CI/CD, comfortable owning a service end-to-end. " +
+  "Nice to have: Redis, Docker, fintech/payments background. Location: Remote within the EU.";
+
+const loadExampleBtn = document.getElementById("load-example");
+if (loadExampleBtn) {
+  loadExampleBtn.addEventListener("click", () => {
+    // Only fill the profile if the user hasn't set their own.
+    const existing = tracker.loadProfile();
+    if (!existing.resume) {
+      tracker.saveProfile(EXAMPLE_PROFILE);
+      loadProfileIntoUI();
+    }
+    el.jd.value = EXAMPLE_JD;
+    el.jTitle.value = "Backend Engineer (Python)";
+    el.jCompany.value = "PayGrid";
+    updateScoreHint();
+    showBanner("info", "Loaded a sample profile + job. Connect Pollen, then hit “Should I apply?” — this one should score high.");
+  });
+}
 
 // --- errors + util --------------------------------------------------------
 function handleApiError(e) {
