@@ -1,0 +1,12 @@
+{
+  "name": "shouldiapply",
+  "version": "0.1.0",
+  "description": "Get your real, calibrated odds on a job before you apply — powered by Jev on Pollinations. Free, private, BYOP.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "check": "node --check config.js && node --check auth.js && node --check jev.js && node --check tracker.js && node --check app.js",
+    "serve": "python -m http.server 8000"
+  },
+  "license": "MIT"
+}

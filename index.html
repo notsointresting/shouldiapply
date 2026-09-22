@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ShouldIApply — your real odds on any job, before you waste the effort</title>
+    <meta
+      name="description"
+      content="Paste your resume and a job description. ShouldIApply uses Jev, a calibrated decision model, to give your honest odds of passing the screen — not a keyword score. Track what you applied to. Free, private, no signup."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand"><span class="logo">◔</span> ShouldIApply</div>
+      <div class="topbar-right">
+        <span id="conn-status" class="conn-status" data-state="off">Not connected</span>
+        <button id="connect-btn" class="btn btn-primary">Connect Pollen</button>
+        <button id="disconnect-btn" class="btn btn-ghost" hidden>Disconnect</button>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero">
+        <h1>Should you apply? Get your <em>real</em> odds first.</h1>
+        <p>
+          Every other tool counts keywords. ShouldIApply asks
+          <strong>Jev</strong> — a decision model trained to be honest about
+          probability — for your <strong>calibrated chance of passing the
+          screen</strong>, plus where you overlap, where you fall short, and
+          whether there's a hard blocker. Then it tracks what you applied to.
+        </p>
+        <p class="byline">
+          Free · 100% private (your resume stays in your browser) · paid from
+          <strong>your own</strong> Pollen · powered by
+          <a href="https://gen.pollinations.ai" target="_blank" rel="noopener">Pollinations</a>.
+        </p>
+      </section>
+
+      <div id="banner" class="banner" hidden></div>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="score">Score a job</button>
+        <button class="tab" data-tab="profile">Your profile</button>
+        <button class="tab" data-tab="tracker">Tracker <span id="tracker-count" class="badge"></span></button>
+      </nav>
+
+      <!-- PROFILE -->
+      <section class="view" data-view="profile" hidden>
+        <div class="panel">
+          <div class="panel-head"><h2>Your profile</h2><span class="muted small">Saved locally — never uploaded.</span></div>
+          <label class="field">
+            <span>Resume (paste plain text)</span>
+            <textarea id="p-resume" rows="10" spellcheck="false" placeholder="Paste your resume text here…"></textarea>
+          </label>
+          <div class="grid2">
+            <label class="field"><span>Current title</span><input id="p-title" type="text" placeholder="e.g. Backend Engineer" /></label>
+            <label class="field"><span>Years of experience</span><input id="p-years" type="number" min="0" max="60" placeholder="e.g. 4" /></label>
+            <label class="field"><span>Top skills</span><input id="p-skills" type="text" placeholder="e.g. Python, AWS, Postgres" /></label>
+            <label class="field"><span>Location</span><input id="p-location" type="text" placeholder="e.g. Berlin / remote" /></label>
+          </div>
+          <label class="field"><span>Work preference</span><input id="p-workpref" type="text" placeholder="e.g. remote only, hybrid ok" /></label>
+          <div class="panel-foot"><span id="p-saved" class="muted small"></span><button id="p-save" class="btn btn-primary">Save profile</button></div>
+        </div>
+      </section>
+
+      <!-- SCORE -->
+      <section class="view" data-view="score">
+        <div class="panel">
+          <div class="panel-head"><h2>Paste the job description</h2></div>
+          <textarea id="jd" rows="10" spellcheck="false" placeholder="Paste the full job description here…"></textarea>
+          <div class="grid2">
+            <label class="field"><span>Job title (optional)</span><input id="j-title" type="text" placeholder="auto if left blank" /></label>
+            <label class="field"><span>Company (optional)</span><input id="j-company" type="text" /></label>
+          </div>
+          <label class="field"><span>Job link (optional, for the tracker)</span><input id="j-url" type="url" placeholder="https://…" /></label>
+          <div class="panel-foot"><span id="score-hint" class="muted small">Fill your profile first, then score.</span><button id="score-btn" class="btn btn-primary">Should I apply?</button></div>
+        </div>
+
+        <div id="scorecard" class="panel scorecard" hidden>
+          <div class="verdict-row">
+            <div id="verdict-badge" class="verdict-badge">—</div>
+            <div class="verdict-main">
+              <div class="odds"><span id="odds-num">—</span><span class="odds-label">chance of passing the screen</span></div>
+              <div id="verdict-reasons" class="muted small"></div>
+            </div>
+          </div>
+          <div class="metrics" id="metrics"></div>
+          <div class="scorecard-foot">
+            <span id="score-usage" class="muted small"></span>
+            <button id="track-btn" class="btn btn-ghost">I applied — track it</button>
+          </div>
+          <p class="muted small disclaimer">
+            These are Jev's calibrated estimates from your resume and the JD — a guide, not a guarantee. It can't see the other applicants.
+          </p>
+        </div>
+      </section>
+
+      <!-- TRACKER -->
+      <section class="view" data-view="tracker" hidden>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Applications</h2>
+            <div class="row">
+              <button id="export-json" class="btn btn-ghost small">Export JSON</button>
+              <button id="export-csv" class="btn btn-ghost small">Export CSV</button>
+            </div>
+          </div>
+          <div id="tracker-list" class="tracker-list"><p class="empty muted">Nothing tracked yet. Score a job and hit "I applied".</p></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Your resume and applications never leave your browser.</span>
+      <span>
+        <a href="https://github.com/notsointresting/awesome-jev-family" target="_blank" rel="noopener">What is a decision model?</a>
+        · Powered by <a href="https://gen.pollinations.ai" target="_blank" rel="noopener">Pollinations</a>
+      </span>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
