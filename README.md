@@ -1,113 +1,102 @@
-# ShouldIApply ◔
+# ShouldIApply — free AI job fit checker and resume matcher
 
-**Get your real odds on a job before you waste the effort.**
+**Paste a job ad and see your real chance of getting past the resume screen — before you spend an hour applying.**
+Then see exactly what you're missing, get your resume and LinkedIn wording improved for that job, and track every application. Free, private, no account.
 
-Every other tool counts keywords. ShouldIApply asks **Jev** — TypeSafe's
-decision model, trained to be *honest about probability* — for your
-**calibrated chance of passing the initial screen**, plus where you overlap,
-where you fall short, whether you're over/under-qualified, and whether there's a
-hard blocker. Then it tracks what you applied to.
+[![Live app](https://img.shields.io/badge/try_it-live_app-3d5eea)](https://notsointresting.github.io/shouldiapply/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0f8a5f)](LICENSE)
+[![No signup](https://img.shields.io/badge/signup-none-a86a0c)](#privacy)
+[![GitHub stars](https://img.shields.io/github/stars/notsointresting/shouldiapply?style=social)](https://github.com/notsointresting/shouldiapply/stargazers)
 
-- **Free.** No signup. Paid from **your own** Pollen (Bring Your Own Pollen).
-- **100% private.** Your resume and application history live in your browser
-  (`localStorage`), never uploaded to us.
-- **Honest, not hype.** A calibrated probability from a decision model — not a
-  keyword-overlap score, not a chatbot's guess.
+**👉 [Open ShouldIApply](https://notsointresting.github.io/shouldiapply/)**
 
-Powered by [Pollinations](https://gen.pollinations.ai)' typed-decision endpoint
-(`jev`, via `POST /alpha/decisions`). Curious what a decision model is? See
-[awesome-jev-family](https://github.com/notsointresting/awesome-jev-family).
+![ShouldIApply result: 78% chance of passing the resume screen, with a requirement-by-requirement checklist](docs/screenshot.png)
+
+## Who it's for
+
+- **Job seekers** who send lots of applications and want to spend time on the ones they can actually get.
+- **Career switchers** who want to know which requirements they already meet and which ones are real gaps.
+- **Anyone tired of ATS keyword scores** that say "72% match" without saying whether you'll get a call.
+
+## What it does
+
+| Feature | What you get |
+| --- | --- |
+| **Resume screen chance** | Your estimated chance of getting past the first resume check (recruiter or ATS), with an Apply / Worth a try / Probably skip verdict and plain reasons. |
+| **Requirement checklist** | Each must-have from the job ad marked ✓ yes, ~ unclear, or ✗ not on your resume. |
+| **Improve my chances** | Rewritten resume bullets, LinkedIn headline and About section aimed at this job's gaps — **using only what you've really done**. Invented numbers are flagged; gaps wording can't fix get honest next steps. |
+| **Job application tracker** | Save jobs you applied to, update status (applied → interview → offer), notes, search, filters, CSV export, backups. |
+| **Were the predictions right?** | Compares the predicted chance with your real interview rate, so you can see if the estimates hold up for you. |
+| **Resume upload** | Import your resume from PDF or text. |
+| **Compare jobs** | Every job you check is ranked by your chance, side by side. |
 
 ## How it works
 
-1. **Profile** (once) — paste your resume + a few fields. Saved locally.
-2. **Score a job** — paste a job description → Connect Pollen → one Jev call
-   returns, in parallel:
-   - **pass_screen** (`noul`) — your calibrated odds of clearing the screen ← headline
-   - **technical_overlap** / **experience_gap** (`score`) — how you match up
-   - **seniority_match** (`choice`) — under / good fit / over-qualified
-   - **has_core_skills**, **location_ok**, **hard_blocker** (`noul`) — gates
-   - **req_N** (`noul`) — one per must-have line code pulls from the JD → a ✓/✗
-     requirement-by-requirement breakdown
-3. **Verdict** — the app (not the model) turns those into Apply / Stretch / Skip
-   with honest reasons.
-4. **Track** — one click logs `{title, company, link, date, status, odds}` to a
-   local dashboard: search/filter/sort, notes, status dates, undo, duplicate
-   detection, JSON import + JSON/CSV export.
-5. **Improve my chances** — one call to a text model (`/v1/chat/completions`)
-   rewrites your resume lines, LinkedIn headline and About section toward this
-   job's gaps. It only rewords what your resume already shows: numbers not in your
-   resume are flagged, and gaps wording can't fix are listed with honest next steps.
-   Prompt adapted from the Profile Optimizer in
-   [sergebulaev/linkedin-skills](https://github.com/sergebulaev/linkedin-skills) (MIT).
-6. **Calibration** — the tracker compares Jev's odds with what actually happened
-   (interview rate per odds bucket), so you can see whether the odds hold up for you.
+1. **Sign in with Pollinations** — you pay a tiny amount of your own AI credit (Pollen) per check; there's no subscription and no account with us.
+2. **Add your resume** once — it's saved only in your browser.
+3. **Paste a job ad** and click **Should I apply?**
 
-Also: resume import from PDF/.txt (pdf.js, loaded on demand), recent scores ranked
-side by side, save-as-image result card, light/dark theme, works offline once loaded.
+Under the hood, one call to **Jev** — a decision model on [Pollinations](https://pollinations.ai) that returns calibrated probabilities instead of free text — answers typed questions in parallel: pass-the-screen probability, skills overlap, experience, seniority, location fit, deal-breakers (license, degree, clearance, work permit) and one yes/no per requirement. The verdict rules live in code, not in the model. "Improve my chances" uses a separate text model through the OpenAI-compatible `/v1/chat/completions` endpoint.
 
-Counting (years, thresholds, verdict rules) is done in code; Jev does the
-judgment. Same discipline as a good decision-model app should have.
+## Why not a keyword-match resume scanner?
 
-## Run locally
+Most resume checkers count overlapping keywords (TF-IDF) or ask a generic chatbot for a score. A keyword score tells you which words match; it doesn't tell you your odds. ShouldIApply asks a model built to be **honest about probability**, shows *which* requirements you're missing, and refuses to invent experience when it helps you rewrite.
+
+## Privacy
+
+- Your resume, job ads and application history stay in your browser (`localStorage`). There is no backend.
+- Sign-in uses OAuth 2.1 + PKCE; the access token lives only for the browser tab (`sessionStorage`).
+- Only the resume and job ad text are sent to Pollinations when you run a check.
+
+## Run it yourself
+
+It's a static site — plain HTML, CSS and JavaScript, no build step.
 
 ```bash
-python -m http.server 8000
-# open http://localhost:8000/
+git clone https://github.com/notsointresting/shouldiapply.git
+cd shouldiapply
+python -m http.server 8000   # then open http://localhost:8000/
+npm test                     # optional: logic checks
 ```
 
-Uses a Pollinations **App Key** (public `pk_`) in `config.js`. Add both redirect
-URIs to that key at [enter.pollinations.ai/keys](https://enter.pollinations.ai/keys):
+It uses a public Pollinations App Key (`pk_…`) in `config.js`. To use your own, create one at [enter.pollinations.ai/keys](https://enter.pollinations.ai/keys) and add your site URL (and `http://localhost:8000/`) as redirect URIs.
 
-- `https://notsointresting.github.io/shouldiapply/`
-- `http://localhost:8000/`
+## Tech stack
 
-## Why it's different
+- Vanilla JavaScript (ES modules), HTML, CSS — no framework, no build
+- [Pollinations](https://pollinations.ai) — Jev decision model (`/alpha/decisions`) and text models (`/v1/chat/completions`), Bring Your Own Pollen sign-in
+- [pdf.js](https://mozilla.github.io/pdf.js/) for resume PDF import (loaded only when used)
+- Service worker for offline use; hosted on GitHub Pages
 
-Existing resume/JD tools (there are many) score **keyword overlap** (TF-IDF) or
-ask a **generic LLM**. ShouldIApply is the only one that returns a **calibrated
-pass-probability**, because Jev is built for exactly that. Keyword tools tell you
-what words match; ShouldIApply tells you your honest odds.
-
-## Files
+### Project files
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Tabs: Score a job · Profile · Tracker. |
-| `styles.css` | Styling; the odds number + metric bars are the hook. |
-| `config.js` | App Key + endpoints. |
-| `auth.js` | BYOP OAuth 2.1 + PKCE. |
-| `jev.js` | The scorecard: one `/alpha/decisions` call + code-owned verdict rules. |
-| `improve.js` | "Improve my chances": adapted rewrite prompt + invented-number guard. |
-| `tracker.js` | Local application tracker (localStorage, dup detection, export). |
+| `index.html` | The page: Check a job · My resume · My applications. |
+| `styles.css` | Styling, light and dark theme. |
+| `config.js` | App Key, endpoints, model names. |
+| `auth.js` | Sign-in (OAuth 2.1 + PKCE). |
+| `jev.js` | The check: one `/alpha/decisions` call, requirement extraction, verdict rules. |
+| `improve.js` | "Improve my chances": rewrite prompt + invented-number guard. |
+| `tracker.js` | Local application tracker, backups, CSV export. |
 | `app.js` | Controller. |
 | `sw.js`, `manifest.webmanifest`, `icon.svg` | Installable + offline. |
-| `test.mjs` | `npm test` — checks verdict rules, requirement extraction, tracker. |
+| `test.mjs` | `npm test`. |
 
 ## Honest limits
 
-- Jev's odds are **estimates from your resume and the JD** — a guide, not a
-  guarantee. It can't see the other applicants or the recruiter's mood.
-- PDF import extracts text only — scanned (image) PDFs need pasting. A
-  "grab-the-JD-from-the-page" browser extension is a possible v2 addition.
-- Auto-applying to jobs is deliberately **not** included — mass auto-apply hurts
-  candidates and platforms flag it. ShouldIApply helps you *decide*, not spray.
+- The chance is an **estimate from your resume and the job ad** — a guide, not a guarantee. It can't see the other applicants.
+- PDF import reads text only; scanned (image) PDFs need to be pasted.
+- There's deliberately **no auto-apply**. Mass auto-applying hurts candidates and gets flagged. ShouldIApply helps you *decide*.
 
 ## Credits
 
-Feature patterns adapted (MIT) from
-[hugounoclaw/ats-checker](https://github.com/hugounoclaw/ats-checker)
-(client-side paste-and-score UX) and
-[ParasKoundal/JobTracker](https://github.com/ParasKoundal/JobTracker)
-(local one-click tracker, dup detection, export). Built on
-[Pollinations](https://pollinations.ai); BYOP per their
-[Connect User Wallets](https://github.com/pollinations/pollinations/blob/main/BRING_YOUR_OWN_POLLEN.md)
-guide.
+Ideas adapted (MIT) from [hugounoclaw/ats-checker](https://github.com/hugounoclaw/ats-checker) (paste-and-score UX), [ParasKoundal/JobTracker](https://github.com/ParasKoundal/JobTracker) (local tracker), and the Profile Optimizer in [sergebulaev/linkedin-skills](https://github.com/sergebulaev/linkedin-skills) (rewrite rules). Built on [Pollinations](https://pollinations.ai) following their [Bring Your Own Pollen](https://github.com/pollinations/pollinations/blob/main/BRING_YOUR_OWN_POLLEN.md) guide. Curious about decision models? See [awesome-jev-family](https://github.com/notsointresting/awesome-jev-family).
 
-## Like it?
+## Support the project
 
-⭐ [Star it on GitHub](https://github.com/notsointresting/shouldiapply) — it helps other job seekers find it.
+⭐ If ShouldIApply saved you time, [star it on GitHub](https://github.com/notsointresting/shouldiapply) — it helps other job seekers find it. Bugs and ideas: [open an issue](https://github.com/notsointresting/shouldiapply/issues).
 
 ## License
 
-MIT
+[MIT](LICENSE)
