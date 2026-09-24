@@ -1,0 +1,11 @@
+{
+  "name": "ShouldIApply",
+  "short_name": "ShouldIApply",
+  "description": "Your real, calibrated odds on a job before you apply.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0e13",
+  "theme_color": "#0b0e13",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

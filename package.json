@@ -5,7 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "check": "node --check config.js && node --check auth.js && node --check jev.js && node --check tracker.js && node --check app.js",
+    "check": "node --check config.js && node --check auth.js && node --check jev.js && node --check tracker.js && node --check improve.js && node --check app.js && node --check sw.js",
+    "test": "node test.mjs",
     "serve": "python -m http.server 8000"
   },
   "license": "MIT"

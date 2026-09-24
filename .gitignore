@@ -9,3 +9,4 @@ node_modules/
 local.env
 test-live.mjs
 .env
+.playwright-mcp/

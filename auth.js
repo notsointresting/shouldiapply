@@ -4,9 +4,9 @@
 
 import { CONFIG } from "./config.js";
 
-const TOKEN_KEY = "sift_token";
-const VERIFIER_KEY = "sift_pkce_verifier";
-const STATE_KEY = "sift_oauth_state";
+const TOKEN_KEY = "sia_token";
+const VERIFIER_KEY = "sia_pkce_verifier";
+const STATE_KEY = "sia_oauth_state";
 
 // --- PKCE helpers (Web Crypto, no libraries) -----------------------------
 

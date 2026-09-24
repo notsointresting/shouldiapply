@@ -16,6 +16,7 @@ export const CONFIG = {
   KEYS_DASHBOARD: "https://enter.pollinations.ai/keys",
 
   MODEL: "jev",
+  WRITER_MODEL: "openai/gpt-5.4-mini", // text model for "Improve my chances" (~0.005 Pollen per rewrite)
 
   BUDGET: 5, // Pollen; a scorecard is one cheap call
   EXPIRY_DAYS: 7,

@@ -27,10 +27,24 @@ Powered by [Pollinations](https://gen.pollinations.ai)' typed-decision endpoint
    - **technical_overlap** / **experience_gap** (`score`) — how you match up
    - **seniority_match** (`choice`) — under / good fit / over-qualified
    - **has_core_skills**, **location_ok**, **hard_blocker** (`noul`) — gates
+   - **req_N** (`noul`) — one per must-have line code pulls from the JD → a ✓/✗
+     requirement-by-requirement breakdown
 3. **Verdict** — the app (not the model) turns those into Apply / Stretch / Skip
    with honest reasons.
 4. **Track** — one click logs `{title, company, link, date, status, odds}` to a
-   local dashboard with duplicate-link detection and JSON/CSV export.
+   local dashboard: search/filter/sort, notes, status dates, undo, duplicate
+   detection, JSON import + JSON/CSV export.
+5. **Improve my chances** — one call to a text model (`/v1/chat/completions`)
+   rewrites your resume lines, LinkedIn headline and About section toward this
+   job's gaps. It only rewords what your resume already shows: numbers not in your
+   resume are flagged, and gaps wording can't fix are listed with honest next steps.
+   Prompt adapted from the Profile Optimizer in
+   [sergebulaev/linkedin-skills](https://github.com/sergebulaev/linkedin-skills) (MIT).
+6. **Calibration** — the tracker compares Jev's odds with what actually happened
+   (interview rate per odds bucket), so you can see whether the odds hold up for you.
+
+Also: resume import from PDF/.txt (pdf.js, loaded on demand), recent scores ranked
+side by side, save-as-image result card, light/dark theme, works offline once loaded.
 
 Counting (years, thresholds, verdict rules) is done in code; Jev does the
 judgment. Same discipline as a good decision-model app should have.
@@ -64,15 +78,18 @@ what words match; ShouldIApply tells you your honest odds.
 | `config.js` | App Key + endpoints. |
 | `auth.js` | BYOP OAuth 2.1 + PKCE. |
 | `jev.js` | The scorecard: one `/alpha/decisions` call + code-owned verdict rules. |
+| `improve.js` | "Improve my chances": adapted rewrite prompt + invented-number guard. |
 | `tracker.js` | Local application tracker (localStorage, dup detection, export). |
 | `app.js` | Controller. |
+| `sw.js`, `manifest.webmanifest`, `icon.svg` | Installable + offline. |
+| `test.mjs` | `npm test` — checks verdict rules, requirement extraction, tracker. |
 
 ## Honest limits
 
 - Jev's odds are **estimates from your resume and the JD** — a guide, not a
   guarantee. It can't see the other applicants or the recruiter's mood.
-- Resume input is **paste-text** in v1 (most robust). PDF import and
-  "grab-the-JD-from-the-page" (browser extension) are possible v2 additions.
+- PDF import extracts text only — scanned (image) PDFs need pasting. A
+  "grab-the-JD-from-the-page" browser extension is a possible v2 addition.
 - Auto-applying to jobs is deliberately **not** included — mass auto-apply hurts
   candidates and platforms flag it. ShouldIApply helps you *decide*, not spray.
 
@@ -86,6 +103,10 @@ Feature patterns adapted (MIT) from
 [Pollinations](https://pollinations.ai); BYOP per their
 [Connect User Wallets](https://github.com/pollinations/pollinations/blob/main/BRING_YOUR_OWN_POLLEN.md)
 guide.
+
+## Like it?
+
+⭐ [Star it on GitHub](https://github.com/notsointresting/shouldiapply) — it helps other job seekers find it.
 
 ## License
 
